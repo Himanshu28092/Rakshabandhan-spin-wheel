@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Raksha Bandhan Spin & Win!</title>
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.5.1/dist/confetti.browser.min.js"></script>
+
+    <style>
+        :root {
+            --primary-color: #ff3e6c;
+            --secondary-color: #ffc107;
+            --background-color: #1a021d;
+            --text-color: #ffffff;
+            --glow-color: rgba(255, 62, 108, 0.8);
+        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: radial-gradient(circle, #4a0d4e, var(--background-color));
+            color: var(--text-color);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: flex-start; /* Changed to flex-start for better layout if content grows */
+            min-height: 100vh;
+            text-align: center;
+            padding: 20px 15px;
+            overflow-x: hidden;
+        }
+        /* Removed .ad-container and .ad-container-bottom styles */
+        .container {
+            max-width: 500px;
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 25px;
+            margin-top: 20px; /* Added some top margin for better spacing without top ad */
+            margin-bottom: 20px; /* Added some bottom margin for better spacing without bottom ad */
+        }
+        header h1 {
+            font-size: 2.2rem;
+            font-weight: 700;
+            text-shadow: 0 0 10px var(--secondary-color), 0 0 20px var(--glow-color);
+            animation: flicker 3s infinite alternate;
+        }
+        header p {
+            font-size: 1rem;
+            color: var(--secondary-color);
+            margin-top: -10px;
+        }
+        .wheel-container {
+            position: relative;
+            width: 320px;
+            height: 320px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        .wheel-pointer {
+            position: absolute;
+            width: 0;
+            height: 0;
+            border-left: 20px solid transparent;
+            border-right: 20px solid transparent;
+            border-top: 40px solid var(--primary-color);
+            top: -15px;
+            z-index: 10;
+            filter: drop-shadow(0 -5px 5px rgba(0,0,0,0.3));
+        }
+        #spin-wheel {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+            transition: transform 6s cubic-bezier(0.25, 0.1, 0.25, 1);
+            transform: rotate(0deg);
+        }
+        .glowing-btn {
+            padding: 15px 30px;
+            font-size: 1.2rem;
+            font-weight: 600;
+            color: var(--text-color);
+            background: linear-gradient(45deg, var(--primary-color), #ff75a0);
+            border: none;
+            border-radius: 50px;
+            cursor: pointer;
+            box-shadow: 0 0 15px var(--glow-color), 0 0 30px var(--glow-color);
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-block;
+            width: 100%;
+        }
+        .glowing-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 0 25px var(--glow-color), 0 0 50px var(--glow-color);
+        }
+        .glowing-btn:active {
+            transform: translateY(0) scale(0.95);
+            box-shadow: 0 0 10px var(--glow-color);
+        }
+        #spin-btn { animation: pulse 2s infinite; }
+        #spin-btn:disabled {
+            cursor: not-allowed;
+            background: #888;
+            box-shadow: none;
+            animation: none;
+        }
+        .hidden { display: none !important; }
+        .message-box {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            padding: 25px;
+            border-radius: 15px;
+            backdrop-filter: blur(10px);
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+            animation: fadeIn 0.5s ease-in-out;
+        }
+        .message-box h2 {
+            color: var(--secondary-color);
+            font-size: 1.8rem;
+        }
+        .message-box #prize-name {
+            color: var(--primary-color);
+            font-weight: 700;
+        }
+        .message-box input {
+            padding: 12px;
+            border-radius: 8px;
+            border: 1px solid var(--secondary-color);
+            background: rgba(0,0,0,0.3);
+            color: var(--text-color);
+            font-family: 'Poppins', sans-serif;
+            font-size: 1rem;
+        }
+        .message-box input::placeholder { color: #ccc; }
+        @keyframes flicker {
+            0%, 100% { text-shadow: 0 0 10px var(--secondary-color), 0 0 20px var(--glow-color); }
+            50% { text-shadow: 0 0 15px var(--secondary-color), 0 0 30px var(--glow-color); }
+        }
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        @media (max-width: 400px) {
+            header h1 { font-size: 1.8rem; }
+            .wheel-container { width: 280px; height: 280px; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- ======== MAIN APP CONTENT ======== -->
+    <div class="container">
+        <header>
+            <h1>Celebrate Raksha Bandhan!</h1>
+            <p>Spin the Wheel & Win a Guaranteed Gift!</p>
+        </header>
+        <div class="wheel-container">
+            <div class="wheel-pointer"></div>
+            <img id="spin-wheel" src="spin.png" alt="Spin Wheel"> <!-- Make sure you have spin.png in the same directory -->
+        </div>
+        <button id="spin-btn" class="glowing-btn">SPIN NOW</button>
+        <form id="claim-form" class="message-box hidden">
+            <h2>Congratulations! You won <strong id="prize-name"></strong>!</h2>
+            <p>Please enter your details to proceed.</p>
+            <input type="text" id="user-name" placeholder="Enter Your Name" required>
+            <input type="tel" id="user-mobile" placeholder="Enter Your Mobile Number" required>
+            <button type="submit" class="glowing-btn">SUBMIT & PROCEED</button>
+        </form>
+        <div id="share-container" class="message-box hidden">
+             <h2>Final Step to Claim!</h2>
+             <p>To confirm your prize, please share this page with 10 WhatsApp friends or 3 groups.</p>
+             <a id="whatsapp-share-btn" href="#" class="glowing-btn" target="_blank">Share on WhatsApp</a>
+        </div>
+        <div id="success-message" class="message-box hidden">
+             <h2>Claim Submitted!</h2>
+             <p>Your prize claim has been submitted successfully!</p>
+             <p>Congratulations again! You will be contacted soon.</p>
+        </div>
+    </div>
+    
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const spinBtn = document.getElementById('spin-btn');
+            const spinWheel = document.getElementById('spin-wheel');
+            const prizeNameSpan = document.getElementById('prize-name');
+            const claimForm = document.getElementById('claim-form');
+            const shareContainer = document.getElementById('share-container');
+            const whatsappShareBtn = document.getElementById('whatsapp-share-btn');
+            const successMessage = document.getElementById('success-message');
+
+            const prizes = [
+                { name: 'iPhone 14', degrees: [346, 375] }, { name: '₹100 PayTM Cash', degrees: [316, 345] },
+                { name: 'Movie Ticket', degrees: [286, 315] }, { name: 'Samsung TV', degrees: [256, 285] },
+                { name: 'Smartwatch', degrees: [226, 255] }, { name: 'Bluetooth Speaker', degrees: [196, 225] },
+                { name: 'Better Luck Next Time', degrees: [166, 195], isLoser: true }, { name: 'AirPods', degrees: [136, 165] },
+                { name: 'Rakhi', degrees: [106, 135] }, { name: 'Amazon Voucher ₹50', degrees: [76, 105] },
+                { name: 'Sonpapdi ka dibba', degrees: [46, 75] }, { name: '20% Discount', degrees: [16, 45] }
+            ];
+            
+            const winningPrizes = prizes.filter(p => !p.isLoser);
+            let isSpinning = false;
+            let wonPrize = null;
+            
+            spinBtn.addEventListener('click', () => {
+                if (isSpinning) return;
+                isSpinning = true;
+                spinBtn.disabled = true;
+                spinBtn.textContent = 'SPINNING...';
+                const randomPrizeIndex = Math.floor(Math.random() * winningPrizes.length);
+                wonPrize = winningPrizes[randomPrizeIndex];
+                const [min, max] = wonPrize.degrees;
+                const targetDegree = Math.floor(Math.random() * (max - min + 1)) + min; // Corrected to be inclusive
+                const fullRotations = Math.floor(Math.random() * 4) + 5; // 5 to 8 full rotations
+                const rotationAngle = (fullRotations * 360) + targetDegree;
+                spinWheel.style.transform = `rotate(${rotationAngle}deg)`;
+                
+                spinWheel.addEventListener('transitionend', () => {
+                    prizeNameSpan.textContent = wonPrize.name;
+                    if (typeof confetti === 'function') { // Check if confetti is loaded
+                        confetti({ particleCount: 150, spread: 90, origin: { y: 0.6 } });
+                    }
+                    spinBtn.classList.add('hidden');
+                    claimForm.classList.remove('hidden');
+                }, { once: true });
+            });
+
+            claimForm.addEventListener('submit', (e) => {
+                e.preventDefault();
+                const name = document.getElementById('user-name').value;
+                const mobile = document.getElementById('user-mobile').value;
+                if (name.trim() === '' || mobile.trim() === '') {
+                    alert('Please fill in both your name and mobile number.');
+                    return;
+                }
+                // Basic mobile number validation (10 digits) - you might want something more robust
+                if (!/^\d{10}$/.test(mobile.trim())) {
+                     alert('Please enter a valid 10-digit mobile number.');
+                     return;
+                }
+                const shareText = `I just won a ${wonPrize.name} on this Spin & Win page for Raksha Bandhan! 🤩 Try your luck too!`;
+                whatsappShareBtn.href = `https://api.whatsapp.com/send?text=${encodeURIComponent(shareText + ' ' + window.location.href)}`;
+                claimForm.classList.add('hidden');
+                shareContainer.classList.remove('hidden');
+            });
+
+            whatsappShareBtn.addEventListener('click', () => {
+                // This logic is a placeholder. Real verification of sharing is not possible client-side.
+                whatsappShareBtn.textContent = 'Verifying... Please Wait';
+                whatsappShareBtn.style.pointerEvents = 'none'; // Prevent multiple clicks
+
+                // Simulate verification and then show success
+                // In a real app, this would be more complex or handled differently
+                setTimeout(() => {
+                    shareContainer.classList.add('hidden');
+                    successMessage.classList.remove('hidden');
+                }, 4000); // Increased delay to make "verification" seem more plausible
+            });
+        });
+    </script>
+</body>
+</html>
