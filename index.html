@@ -26,13 +26,20 @@
             display: flex;
             flex-direction: column;
             align-items: center;
-            justify-content: flex-start; /* Changed to flex-start for better layout if content grows */
+            justify-content: flex-start;
             min-height: 100vh;
             text-align: center;
             padding: 20px 15px;
             overflow-x: hidden;
         }
-        /* Removed .ad-container and .ad-container-bottom styles */
+        /* Styles for Ad Containers */
+        .ad-container-top, .ad-container-bottom {
+            width: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin: 10px 0;
+        }
         .container {
             max-width: 500px;
             width: 100%;
@@ -40,8 +47,8 @@
             flex-direction: column;
             align-items: center;
             gap: 25px;
-            margin-top: 20px; /* Added some top margin for better spacing without top ad */
-            margin-bottom: 20px; /* Added some bottom margin for better spacing without bottom ad */
+            margin-top: 10px; /* Adjusted margin for ad spacing */
+            margin-bottom: 20px; 
         }
         header h1 {
             font-size: 2.2rem;
@@ -161,6 +168,20 @@
     </style>
 </head>
 <body>
+    
+    <!-- ======== TOP ADVERTISEMENT ======== -->
+    <div class="ad-container-top">
+        <script type="text/javascript">
+            atOptions = {
+                'key' : '122ee80aa0bbfbcfe53c46d08b2d9c40',
+                'format' : 'iframe',
+                'height' : 50,
+                'width' : 320,
+                'params' : {}
+            };
+        </script>
+        <script type="text/javascript" src="//www.highperformanceformat.com/122ee80aa0bbfbcfe53c46d08b2d9c40/invoke.js"></script>
+    </div>
 
     <!-- ======== MAIN APP CONTENT ======== -->
     <div class="container">
@@ -192,6 +213,20 @@
         </div>
     </div>
     
+    <!-- ======== BOTTOM ADVERTISEMENT ======== -->
+    <div class="ad-container-bottom">
+        <script type="text/javascript">
+            atOptions = {
+                'key' : '8b0b391d1dbe9db28dbf2e0511aad5d6',
+                'format' : 'iframe',
+                'height' : 250,
+                'width' : 300,
+                'params' : {}
+            };
+        </script>
+        <script type="text/javascript" src="//www.highperformanceformat.com/8b0b391d1dbe9db28dbf2e0511aad5d6/invoke.js"></script>
+    </div>
+
     <script>
         document.addEventListener('DOMContentLoaded', () => {
             const spinBtn = document.getElementById('spin-btn');
@@ -223,14 +258,14 @@
                 const randomPrizeIndex = Math.floor(Math.random() * winningPrizes.length);
                 wonPrize = winningPrizes[randomPrizeIndex];
                 const [min, max] = wonPrize.degrees;
-                const targetDegree = Math.floor(Math.random() * (max - min + 1)) + min; // Corrected to be inclusive
-                const fullRotations = Math.floor(Math.random() * 4) + 5; // 5 to 8 full rotations
+                const targetDegree = Math.floor(Math.random() * (max - min + 1)) + min;
+                const fullRotations = Math.floor(Math.random() * 4) + 5;
                 const rotationAngle = (fullRotations * 360) + targetDegree;
                 spinWheel.style.transform = `rotate(${rotationAngle}deg)`;
                 
                 spinWheel.addEventListener('transitionend', () => {
                     prizeNameSpan.textContent = wonPrize.name;
-                    if (typeof confetti === 'function') { // Check if confetti is loaded
+                    if (typeof confetti === 'function') {
                         confetti({ particleCount: 150, spread: 90, origin: { y: 0.6 } });
                     }
                     spinBtn.classList.add('hidden');
@@ -246,7 +281,6 @@
                     alert('Please fill in both your name and mobile number.');
                     return;
                 }
-                // Basic mobile number validation (10 digits) - you might want something more robust
                 if (!/^\d{10}$/.test(mobile.trim())) {
                      alert('Please enter a valid 10-digit mobile number.');
                      return;
@@ -258,18 +292,14 @@
             });
 
             whatsappShareBtn.addEventListener('click', () => {
-                // This logic is a placeholder. Real verification of sharing is not possible client-side.
                 whatsappShareBtn.textContent = 'Verifying... Please Wait';
-                whatsappShareBtn.style.pointerEvents = 'none'; // Prevent multiple clicks
-
-                // Simulate verification and then show success
-                // In a real app, this would be more complex or handled differently
+                whatsappShareBtn.style.pointerEvents = 'none'; 
                 setTimeout(() => {
                     shareContainer.classList.add('hidden');
                     successMessage.classList.remove('hidden');
-                }, 4000); // Increased delay to make "verification" seem more plausible
+                }, 4000);
             });
         });
     </script>
 </body>
-</html>
+    </html>
